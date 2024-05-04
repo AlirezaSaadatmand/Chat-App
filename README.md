@@ -1,4 +1,4 @@
-This uses sockets to communicate between server and the client
+This app uses sockets to communicate between server and client
 
 Server : send the received message to all other clients 
 
