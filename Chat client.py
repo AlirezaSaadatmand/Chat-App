@@ -77,7 +77,6 @@ class ChatApp:
         self.send_message("<GETMEMEBER>")
         while True:
             msg = client.recv(2048).decode(FORMAT)
-            print(msg.split(' '))
             if msg.split(" ")[0] == "<MESSAGE>":
                 self.root.after(0, self.update_chat, msg.split(" ")[1], " ".join(msg.split(" ")[2:]))
                 
