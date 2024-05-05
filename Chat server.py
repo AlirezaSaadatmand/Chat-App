@@ -27,16 +27,27 @@ def handle_client(connection , address):
             masg = connection.recv(masg).decode(FORMAT)
             if masg == "<DISCONNECT>":
                 break
-            if clients[connection] == "":
-                clients[connection] = masg
+            if clients[connection] == "" and masg.split(" ")[0] == "<CONNECTED>":
+                clients[connection] = masg.split(" ")[1]
                 continue
+            
+            if masg == "<GETMEMEBER>" and len(clients.values()) != 0:
+                s = "<MEMBERS> "
+                for client in clients.keys(): 
+                    if client != connection:
+                        s += clients[client] + " "
+                s = s[:-1]
+                connection.send(s.encode(FORMAT))
+                continue
+
             for client in clients.keys():
                 if client != connection:
-                    client.send(f"{clients[connection]} {masg}".encode(FORMAT))
+                    client.send(f"<MESSAGE> {clients[connection]} {masg}".encode(FORMAT))
                     
     clients.pop(connection)
     for client in clients.keys():
-        client.send(f"{clients[connection]} <DISCONNECTED>".encode(FORMAT))
+        if client != connection:
+            client.send(f"{clients[connection]} <DISCONNECTED>".encode(FORMAT))
     print(f"Active clients : {len(clients.keys())}")
     connection.close()
 

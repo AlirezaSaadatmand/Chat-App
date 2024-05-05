@@ -28,15 +28,19 @@ class ChatApp:
         self.name = ""
         self.made = False
         
-        self.thread = threading.Thread(target=self.receive_messages)
-        self.thread.start()
+        self.done = True
+
 
     def set_name(self):
         name = self.name_entry.get()
         if name:
             self.name += name
+            
             self.create_gui()
-            self.send_message(self.name)
+            
+            self.thread2 = threading.Thread(target=self.receive_messages)
+            self.thread2.start()    
+            
             self.name_lb.destroy()
             self.name_entry.destroy()
             self.btn1.destroy()
@@ -67,23 +71,31 @@ class ChatApp:
             self.send_button.pack()
             self.made = True
 
+
     def receive_messages(self):
+        self.send_message(f"<CONNECTED> {self.name}")
+        self.send_message("<GETMEMEBER>")
         while True:
-            try:
-                msg = client.recv(2048).decode(FORMAT)
-                name, msg = msg.split(" ")
-                if name not in active_users:
-                    active_users.append(name)
-                    self.root.after(0, self.update_names, name, msg)
-                    
-                if msg == "<DISCONNECTED>":
-                    self.root.after(0, self.update_names, name, msg)
-                    active_users.remove(name)
-                else:
-                    self.root.after(0, self.update_chat, name, msg)
-            except Exception as e:
-                print(e)
-                break
+            msg = client.recv(2048).decode(FORMAT)
+            print(msg.split(' '))
+            if msg.split(" ")[0] == "<MESSAGE>":
+                self.root.after(0, self.update_chat, msg.split(" ")[1], " ".join(msg.split(" ")[2:]))
+                
+                if msg.split(" ")[1] not in active_users:
+                    active_users.append(msg.split(" ")[1])
+                    self.root.after(0, self.update_names , msg.split(" ")[1], " ".join(msg.split(" ")[2:]))
+                continue
+            
+            elif msg.split(" ")[0] == "<DISCONNECTED>":
+                self.root.after(0, self.update_names , msg.split(" ")[1], " ".join(msg.split(" ")[2:]))
+                active_users.remove(msg.split(" ")[1])
+            
+            elif msg.split(" ")[0] == "<MEMBERS>":
+                if msg[10:] != "":
+                    for x in msg[10:].split(" "):
+                        active_users.append(x)
+                        self.root.after(0, self.update_names, x , " ")
+
 
     def send(self):
         message = self.entry.get()
@@ -108,7 +120,9 @@ class ChatApp:
             
     def update_names(self , name , message):
         if message == "<DISCONNECTED>":
-            ...
+            print("hello")
+            idx = self.name_list.get(0, tk.END).index(name)
+            self.name_list.delete(idx)
         else:
             self.name_list.insert(tk.END , f"{name}")
 
@@ -117,6 +131,7 @@ def main():
     app = ChatApp(root)
     root.mainloop()
     app.send_message("<DISCONNECT>")
+    exit()
 
 if __name__ == "__main__":
     main()
