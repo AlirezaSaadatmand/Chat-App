@@ -1,6 +1,8 @@
 import socket
 import threading
+import time
 
+start_time = time.time()
 
 PORT = 7070
 
@@ -21,6 +23,14 @@ def handle_client(connection , address):
     clients[connection] = ""
     
     while True:
+        if clients.keys() and time.time() - start_time == 10:
+            s = "<MEMBERS> "
+            for client in clients.keys(): 
+                if client != connection:
+                    s += clients[client] + " "
+            s = s[:-1]
+            connection.send(s.encode(FORMAT))
+            
         masg = connection.recv(HEADER).decode(FORMAT)
         if masg:
             masg = int(masg)

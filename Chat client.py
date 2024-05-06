@@ -92,8 +92,9 @@ class ChatApp:
             elif msg.split(" ")[0] == "<MEMBERS>":
                 if msg[10:] != "":
                     for x in msg[10:].split(" "):
-                        active_users.append(x)
-                        self.root.after(0, self.update_names, x , " ")
+                        if x not in active_users:
+                            active_users.append(x)
+                            self.root.after(0, self.update_names, x , " ")
 
 
     def send(self):
