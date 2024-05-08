@@ -118,10 +118,10 @@ class ChatApp:
             self.chat_list.insert(tk.END, f"{name}: " + message)
             
     def update_names(self , name , message):
-        if message == "<DISCONNECTED>" and name != "":
+        if message == "<DISCONNECTED>":
             idx = active_users.index(name)
             self.name_list.delete(idx)
-        else:
+        elif message != "<DISCONNECTED>" and name != "":
             self.name_list.insert(tk.END , f"{name}")
 
 def main():
