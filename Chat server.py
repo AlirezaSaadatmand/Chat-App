@@ -69,7 +69,7 @@ def start():
         conection , address = server.accept()
         thread = threading.Thread(target=handle_client , args=(conection , address))
         thread.start()
-        print(f"ACTiVE CONNECTIONS =====> {threading.active_count() - 1} \n")
+        print(f"ACTiVE CONNECTIONS =====> {len(clients.keys())+1} \n")
 
 start()
 

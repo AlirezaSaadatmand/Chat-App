@@ -50,13 +50,13 @@ class ChatApp:
             self.frame = tk.Frame(self.root)
             self.frame.pack(pady=10)
             
-            self.name_list = tk.Listbox(self.frame, width=15, height=20)
+            self.name_list = tk.Listbox(self.frame, width=15, height=18)
             self.name_list.pack(side=tk.RIGHT)
             self.scrollbar2 = tk.Scrollbar(self.frame, orient=tk.VERTICAL, command=self.name_list.yview)
             self.scrollbar2.pack(side=tk.RIGHT, fill=tk.Y)
             self.name_list.config(yscrollcommand=self.scrollbar2.set)
             
-            self.chat_list = tk.Listbox(self.frame, width=50, height=20)
+            self.chat_list = tk.Listbox(self.frame, width=50, height=18)
             self.chat_list.pack(side=tk.LEFT)
             self.scrollbar = tk.Scrollbar(self.frame, orient=tk.VERTICAL, command=self.chat_list.yview)
             self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -115,7 +115,8 @@ class ChatApp:
         #     idx = active_users.index(name)
         #     self.name_list.delete(idx)
         for name in names:
-            self.name_list.insert(tk.END , f"{name}")
+            if name != "" or name != " ":
+                self.name_list.insert(tk.END , f"{name}")
 
 def main():
     root = tk.Tk()
