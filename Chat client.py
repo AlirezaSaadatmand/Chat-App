@@ -77,16 +77,6 @@ class ChatApp:
             if msg.split(" ")[0] == "<MESSAGE>":
                 self.root.after(0, self.update_chat, msg.split(" ")[1], " ".join(msg.split(" ")[2:]))
                 
-                # if msg.split(" ")[1] not in active_users:
-                #     active_users.append(msg.split(" ")[1])
-                #     self.root.after(0, self.update_names , msg.split(" ")[1], " ".join(msg.split(" ")[2:]))
-                # continue
-            
-            # elif msg.split(" ")[0] == "<DISCONNECTED>":
-            #     self.root.after(0, self.update_names , msg.split(" ")[1], " ".join(msg.split(" ")[2:]))
-            #     active_users.remove(msg.split(" ")[1])
-            #     continue
-            
             elif msg.split(" ")[0] == "<MEMBERS>":
                 if msg[10:] != "":
                     
@@ -96,7 +86,6 @@ class ChatApp:
                     for x in msg[10:].split(" "):
                         if x not in active_users:
                             active_users.append(x)
-
 
     def send(self):
         message = self.entry.get()
