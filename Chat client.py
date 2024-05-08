@@ -110,10 +110,6 @@ class ChatApp:
             
     def update_names(self , names):
         self.name_list.delete(0 , tk.END)
-        # if message == "<DISCONNECTED>":
-        #     print("hello")
-        #     idx = active_users.index(name)
-        #     self.name_list.delete(idx)
         for name in names:
             if name != "" or name != " ":
                 self.name_list.insert(tk.END , f"{name}")
