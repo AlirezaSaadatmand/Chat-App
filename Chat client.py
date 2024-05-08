@@ -1,5 +1,5 @@
 import tkinter as tk
-
+from sys import exit
 import socket
 import threading
 
@@ -74,7 +74,7 @@ class ChatApp:
 
     def receive_messages(self):
         self.send_message(f"<CONNECTED> {self.name}")
-        self.send_message("<GETMEMEBER>")
+        # self.send_message("<GETMEMEBER>")
         while True:
             msg = client.recv(2048).decode(FORMAT)
             if msg.split(" ")[0] == "<MESSAGE>":
@@ -95,7 +95,6 @@ class ChatApp:
                         if x not in active_users:
                             active_users.append(x)
                             self.root.after(0, self.update_names, x , " ")
-
 
     def send(self):
         message = self.entry.get()
@@ -119,9 +118,8 @@ class ChatApp:
             self.chat_list.insert(tk.END, f"{name}: " + message)
             
     def update_names(self , name , message):
-        if message == "<DISCONNECTED>":
-            print("hello")
-            idx = self.name_list.get(0, tk.END).index(name)
+        if message == "<DISCONNECTED>" and name != "":
+            idx = active_users.index(name)
             self.name_list.delete(idx)
         else:
             self.name_list.insert(tk.END , f"{name}")
