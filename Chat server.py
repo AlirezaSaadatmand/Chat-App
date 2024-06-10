@@ -30,7 +30,6 @@ def send_memebers():
             for client in clients.keys():
                 if clients[client] != "":
                     client.send(s.encode(FORMAT))
-    
 
 def handle_client(connection , address):
     print(f"NEW CONNECTION {address}")
@@ -57,8 +56,6 @@ def handle_client(connection , address):
                     client.send(f"<MESSAGE> {clients[connection]} {masg}".encode(FORMAT))
 
     connection.close()
-
-        
 
 def start():
     thread2 = threading.Thread(target=send_memebers)

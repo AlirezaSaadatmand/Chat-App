@@ -8,7 +8,7 @@ active_users = []
 PORT = 7070
 FORMAT = "utf_8"
 HEADER = 64
-SERVER = "192.168.14.151"
+SERVER = socket.gethostbyname(socket.gethostname())
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((SERVER, PORT))
 
@@ -47,6 +47,7 @@ class ChatApp:
 
     def create_gui(self):
         if not self.made:
+                        
             self.frame = tk.Frame(self.root)
             self.frame.pack(pady=10)
             
@@ -66,6 +67,9 @@ class ChatApp:
             self.entry.pack(pady=10)
             self.send_button = tk.Button(self.root, text="Send", command=self.send)
             self.send_button.pack()
+            
+            self.root.bind("<Return>" , self.send)
+            
             self.made = True
 
 
